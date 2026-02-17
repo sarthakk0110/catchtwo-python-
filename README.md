@@ -58,6 +58,37 @@ python main.py
 If those variables are set, `main.py` will use them and will not require `data/config.json`.
 
 
+### Token and config setup (exact format)
+You can configure credentials in **either** of these two ways:
+
+1. **Environment variables** (recommended for hosting panels)
+2. `data/config.json` (recommended for local/manual runs)
+
+#### Option A: Hosting panel environment variables
+Create these variables in your hosting panel exactly:
+
+- `USER_TOKEN` = your Discord user token (long string)
+- `SPAM_ID` = numeric channel ID for spam
+- `CATCH_ID` = numeric channel ID for catch channel
+
+Do **not** add extra quotes in panel value fields.
+
+#### Option B: `data/config.json`
+Create/edit `data/config.json` with valid JSON like this:
+
+```json
+{
+  "user_token": "YOUR_DISCORD_USER_TOKEN_HERE",
+  "spam_id": "123456789012345678",
+  "catch_id": "123456789012345678"
+}
+```
+
+Important:
+- keep keys exactly: `user_token`, `spam_id`, `catch_id`
+- keep commas/quotes exactly as JSON
+- `spam_id` and `catch_id` should be Discord channel IDs
+
 ### KataBump / Pterodactyl-style panel fix (`EOFError: EOF when reading a line`)
 If your console shows this error from `setup.py`:
 
