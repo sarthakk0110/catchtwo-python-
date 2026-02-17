@@ -22,7 +22,8 @@ The bot has the following features:
 - 🔍 Pokétwo-Resistant - the autocatcher sends a random series of numbers to enhance undetectability
 
 ### Requirements
-Please note that this autocatcher requires Python 3.8 installed. Python 3.9 simply won't work with Discord.
+Use **Python 3.10** for hosting deployments (recommended on Render).
+Python 3.10 is the safest default for this project in hosted environments.
 
 #### <b>Running the bot</b>
 To start up the bot for the first time, please download the latest release from [here](https://github.com/devraza/catcher-one/releases/). <br>
@@ -37,6 +38,100 @@ This will allow the bot to use your preferred channel to spam as well as catch P
 After you've entered that in, the autocatcher should start successfully. (if not, check if you have entered in the right fields)
 
 > Remember to cd into your autocatcher folder as well. If you need any help with something, feel free to open a Github Issue.
+
+
+### Running on hosting providers
+Many hosts (Railway, Render, Fly.io, etc.) are non-interactive, so `setup.py` may fail there.
+Use environment variables instead:
+
+- `USER_TOKEN`
+- `SPAM_ID`
+- `CATCH_ID`
+
+Then start the app with:
+
+```bash
+pip install -r requirements.txt
+python main.py
+```
+
+If those variables are set, `main.py` will use them and will not require `data/config.json`.
+
+
+### Token and config setup (exact format)
+You can configure credentials in **either** of these two ways:
+
+1. **Environment variables** (recommended for hosting panels)
+2. `data/config.json` (recommended for local/manual runs)
+
+#### Option A: Hosting panel environment variables
+Create these variables in your hosting panel exactly:
+
+- `USER_TOKEN` = your Discord user token (long string)
+- `SPAM_ID` = numeric channel ID for spam
+- `CATCH_ID` = numeric channel ID for catch channel
+
+Do **not** add extra quotes in panel value fields.
+
+#### Option B: `data/config.json`
+Create/edit `data/config.json` with valid JSON like this:
+
+```json
+{
+  "user_token": "YOUR_DISCORD_USER_TOKEN_HERE",
+  "spam_id": "123456789012345678",
+  "catch_id": "123456789012345678"
+}
+```
+
+Important:
+- keep keys exactly: `user_token`, `spam_id`, `catch_id`
+- keep commas/quotes exactly as JSON
+- `spam_id` and `catch_id` should be Discord channel IDs
+
+### KataBump / Pterodactyl-style panel fix (`EOFError: EOF when reading a line`)
+If your console shows this error from `setup.py`:
+
+```
+EOFError: EOF when reading a line
+```
+
+it means your host is starting `setup.py` in a non-interactive environment, where `input()` prompts cannot be answered.
+
+Use this instead:
+
+- **Startup File / Start Command**: `python main.py`
+- **Do NOT use**: `python setup.py`
+
+Set these environment variables in the panel:
+
+- `USER_TOKEN`
+- `SPAM_ID`
+- `CATCH_ID`
+
+Also make sure dependencies are installed first:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Render deployment fields (copy/paste)
+Use a **Background Worker** on Render (not a Web Service), because this bot does not expose an HTTP port.
+
+- **Environment**: `Python 3`
+- **Python Version**: `3.10.13` (or latest available `3.10.x`)
+- **Build Command**: `pip install -r requirements.txt`
+- **Start Command**: `python main.py`
+- **Auto-Deploy**: optional (`On Commit` recommended)
+- **Plan**: any plan that supports always-on workers
+
+Set these Render environment variables:
+
+- `USER_TOKEN` = your Discord user token
+- `SPAM_ID` = channel ID for spam messages
+- `CATCH_ID` = channel ID where Pokétwo appears
+
+If you accidentally create a Web Service, Render may fail health checks since no port is opened; switch it to a Background Worker.
 
 ### Auto-levelling
 To enable auto-levelling, just put in the ID's of the Pokémon you want to be levelled up into the `level` file (inside the `data` folder).
