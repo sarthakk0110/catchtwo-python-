@@ -90,12 +90,15 @@ async def before_spam():
     await bot.wait_until_ready()
 
 
-spam.start()
+def start_spam_loop():
+    if not spam.is_running():
+        spam.start()
 
 
 @bot.event
 async def on_ready():
     print(f'Logged into account: {bot.user.name}')
+    start_spam_loop()
 
 
 @bot.event
@@ -109,7 +112,8 @@ async def on_message(message):
             if message.embeds:
                 embed_title = message.embeds[0].title
                 if embed_title and 'wild pokémon has appeared!' in embed_title:
-                    spam.cancel()
+                    if spam.is_running():
+                        spam.cancel()
                     await asyncio.sleep(1)
                     await channel.send('p!h')
                 elif embed_title and 'Congratulations' in embed_title:
@@ -137,10 +141,10 @@ async def on_message(message):
                     check = random.randint(1, 240)
                     if check == 1:
                         await asyncio.sleep(900)
-                        spam.start()
+                        start_spam_loop()
                     else:
                         await asyncio.sleep(1)
-                        spam.start()
+                        start_spam_loop()
 
                 elif 'Congratulations' in content:
                     global shiny
@@ -165,7 +169,8 @@ async def on_message(message):
                     else:
                         print(f'Total Pokémon Caught: {num_pokemon}')
                 elif 'human' in content:
-                    spam.cancel()
+                    if spam.is_running():
+                        spam.cancel()
                     print('Captcha detected; autocatcher paused. Press enter to restart, after solving captcha manually.')
                     input()
                     await channel.send('p!h')
