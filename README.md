@@ -57,6 +57,33 @@ python main.py
 
 If those variables are set, `main.py` will use them and will not require `data/config.json`.
 
+
+### KataBump / Pterodactyl-style panel fix (`EOFError: EOF when reading a line`)
+If your console shows this error from `setup.py`:
+
+```
+EOFError: EOF when reading a line
+```
+
+it means your host is starting `setup.py` in a non-interactive environment, where `input()` prompts cannot be answered.
+
+Use this instead:
+
+- **Startup File / Start Command**: `python main.py`
+- **Do NOT use**: `python setup.py`
+
+Set these environment variables in the panel:
+
+- `USER_TOKEN`
+- `SPAM_ID`
+- `CATCH_ID`
+
+Also make sure dependencies are installed first:
+
+```bash
+pip install -r requirements.txt
+```
+
 ### Render deployment fields (copy/paste)
 Use a **Background Worker** on Render (not a Web Service), because this bot does not expose an HTTP port.
 
