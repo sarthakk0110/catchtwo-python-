@@ -38,6 +38,41 @@ After you've entered that in, the autocatcher should start successfully. (if not
 
 > Remember to cd into your autocatcher folder as well. If you need any help with something, feel free to open a Github Issue.
 
+
+### Running on hosting providers
+Many hosts (Railway, Render, Fly.io, etc.) are non-interactive, so `setup.py` may fail there.
+Use environment variables instead:
+
+- `USER_TOKEN`
+- `SPAM_ID`
+- `CATCH_ID`
+
+Then start the app with:
+
+```bash
+pip install -r requirements.txt
+python main.py
+```
+
+If those variables are set, `main.py` will use them and will not require `data/config.json`.
+
+### Render deployment fields (copy/paste)
+Use a **Background Worker** on Render (not a Web Service), because this bot does not expose an HTTP port.
+
+- **Environment**: `Python 3`
+- **Build Command**: `pip install -r requirements.txt`
+- **Start Command**: `python main.py`
+- **Auto-Deploy**: optional (`On Commit` recommended)
+- **Plan**: any plan that supports always-on workers
+
+Set these Render environment variables:
+
+- `USER_TOKEN` = your Discord user token
+- `SPAM_ID` = channel ID for spam messages
+- `CATCH_ID` = channel ID where Pokétwo appears
+
+If you accidentally create a Web Service, Render may fail health checks since no port is opened; switch it to a Background Worker.
+
 ### Auto-levelling
 To enable auto-levelling, just put in the ID's of the Pokémon you want to be levelled up into the `level` file (inside the `data` folder).
 
