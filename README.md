@@ -22,7 +22,8 @@ The bot has the following features:
 - 🔍 Pokétwo-Resistant - the autocatcher sends a random series of numbers to enhance undetectability
 
 ### Requirements
-Please note that this autocatcher requires Python 3.8 installed. Python 3.9 simply won't work with Discord.
+Use **Python 3.10** for hosting deployments (recommended on Render).
+Python 3.10 is the safest default for this project in hosted environments.
 
 #### <b>Running the bot</b>
 To start up the bot for the first time, please download the latest release from [here](https://github.com/devraza/catcher-one/releases/). <br>
@@ -60,6 +61,7 @@ If those variables are set, `main.py` will use them and will not require `data/c
 Use a **Background Worker** on Render (not a Web Service), because this bot does not expose an HTTP port.
 
 - **Environment**: `Python 3`
+- **Python Version**: `3.10.13` (or latest available `3.10.x`)
 - **Build Command**: `pip install -r requirements.txt`
 - **Start Command**: `python main.py`
 - **Auto-Deploy**: optional (`On Commit` recommended)
